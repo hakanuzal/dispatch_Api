@@ -35,7 +35,7 @@ namespace DispatchApi.Services
                             e.Password == authentication.Password).ToListAsync();
                 if (result.Count > 0)
                 {
-                    return "OK";
+                    return result[0].Role.ToString();
                 }
                 else
                 {

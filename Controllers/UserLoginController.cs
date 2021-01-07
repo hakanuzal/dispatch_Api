@@ -18,8 +18,7 @@ namespace DispatchApi.Controllers
             _UserService = UserService;
         }
 
-        [HttpGet("Login")]  
-        
+        [HttpPost("Login")]
         public virtual async Task<ActionResult> Login(Authentication authentication)
         {
             return Ok(await this._UserService.LoginMethod(authentication));
