@@ -20,9 +20,9 @@ namespace DispatchApi.Controllers
 
         [HttpGet("Login")]  
         
-        public virtual async Task<ActionResult> Login(string _Email,string _Password)
+        public virtual async Task<ActionResult> Login(Authentication authentication)
         {
-            return Ok(await this._UserService.LoginMethod(_Email,_Password));
+            return Ok(await this._UserService.LoginMethod(authentication));
         }
     }
 }

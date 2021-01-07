@@ -6,6 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using FluentValidation;
+using DispatchApi.Validations;
 
 namespace DispatchApi
 {
@@ -38,7 +40,7 @@ namespace DispatchApi
             services.Configure<ConnectionStrings>(Configuration.GetSection(nameof(ConnectionStrings)));
             services.AddSingleton<IDatabaseSettings>(sp => sp.GetRequiredService<IOptions<ConnectionStrings>>().Value);
             services.AddSingleton<UserLoginService>();
-
+            services.AddSingleton<IValidator<Authentication>, UserValidator>();
             services.AddControllers();
         }
 

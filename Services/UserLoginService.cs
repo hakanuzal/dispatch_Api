@@ -1,11 +1,11 @@
 ﻿using DispatchApi.Models;
+using DispatchApi.Validations;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Threading.Tasks.Dataflow;
 
 namespace DispatchApi.Services
 {
@@ -21,16 +21,33 @@ namespace DispatchApi.Services
             _user = database.GetCollection<User>("user");
             
         }
-        public async Task<List<User>> LoginMethod(String _Email, String _Password)
+        public async Task<string> LoginMethod(Authentication authentication)
         {
             /*var controls = collection.AsQueryable<Controls>()
                 .Where(x => x.code == code)
                 .Select(e => new { e.code, e.Items }).ToList();*/
-
-            var result = await _user.AsQueryable<User>()
-                .Where(e => e.Email == _Email && e.Password == _Password).ToListAsync(); 
+            var validator = new UserValidator();
+            var validate_result = validator.Validate(authentication);
+            if (validate_result.IsValid)
+            {
+                var result = await _user.AsQueryable<User>()
+                            .Where(e => e.Email == authentication.Email &&
+                            e.Password == authentication.Password).ToListAsync();
+                if (result.Count > 0)
+                {
+                    return "OK";
+                }
+                else
+                {
+                    return "BAD";
+                }
                 
-            return result;
+            }
+            else
+            {
+                return validate_result.Errors.FirstOrDefault().ErrorMessage;
+            }
+          
         }
     }
 }
