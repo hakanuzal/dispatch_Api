@@ -34,10 +34,11 @@ namespace DispatchApi
             services.AddTransient(s => new DriversRepository(mongoConnectionString, "dispatchdb", "drivers"));
             services.AddTransient(s => new VehicleRepository(mongoConnectionString, "dispatchdb", "vehicle"));
             services.AddTransient(s => new CustomerRepository(mongoConnectionString, "dispatchdb", "customer"));
+
             services.Configure<ConnectionStrings>(Configuration.GetSection(nameof(ConnectionStrings)));
             services.AddSingleton<IDatabaseSettings>(sp => sp.GetRequiredService<IOptions<ConnectionStrings>>().Value);
-            
-            services.AddControllers();
+            services.AddSingleton<UserLoginService>();
+
             services.AddControllers();
         }
 
